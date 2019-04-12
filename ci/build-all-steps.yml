@@ -36,7 +36,7 @@ steps:
     PACKAGE_TOKEN: $(Package.Token)
 
 # Build
-- script: node make.js build --task "$(task_pattern)"
+- script: node make.js build --task "UseRubyV1"
   displayName: Build
   condition: ne(variables['numTasks'], 0)
 
@@ -61,14 +61,6 @@ steps:
 - script: node make.js test
   displayName: Test with node 6
   condition: ne(variables['numTasks'], 0)
-- script: node make.js testLegacy --task "$(task_pattern)"
+- script: node make.js testLegacy --task "UseRubyV1"
   displayName: Legacy tests with node 6
   condition: ne(variables['numTasks'], 0)
-
-# Only when building on Windows:
-- ${{ if eq(parameters.os, 'Windows_NT') }}:
-
-  # Stop collect diagnostics
-  - powershell: ./ci/stop-collect-diagnostics.ps1
-    displayName: Stop collect diagnostics
-    condition: and(always(), eq(variables.collect_diagnostics, 'true'), ne(variables['numTasks'], 0))
